@@ -14,7 +14,7 @@ class CJsonParser
         void parse(std::string jsonFile);
         CJsonObject findNextToken(std::string& jsonStr,int start );
         void stepThrough(std::string& jsonStr);
-        void BuildTree(std::list<CJsonObject> objs, int startPos);
+        void BuildTree(std::list<CJsonObject> objs);
         int findClosingStatement( std::list<CJsonObject> list, JsonObjectType type, JsonObjectType closingStatement);
         
         int find(std::list<CJsonObject> objs, JsonObjectType type, int startPos);

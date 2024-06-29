@@ -118,10 +118,10 @@ void CJsonParser::stepThrough(std::string& jsonStr)
         obj = findNextToken(jsonStr, start);
         m_jsonObjects.push_back(obj);
     }while(obj.m_type != JsonObjectType::UNKNOWN);
-    BuildTree(m_jsonObjects, 0);
+    BuildTree(m_jsonObjects);
 
 }
-void CJsonParser::BuildTree(std::list<CJsonObject> objs, int startPos)
+void CJsonParser::BuildTree(std::list<CJsonObject> objs)
 {
     if(objs.empty())
     {
@@ -136,7 +136,6 @@ void CJsonParser::BuildTree(std::list<CJsonObject> objs, int startPos)
     auto iter = objs.begin(); //iter != objs.end(); ++iter)
     {
         
-        std::advance(iter, startPos);
         if(iter->m_type == JsonObjectType::OBJECT_START)
         {
             //@Todo finde end of object
@@ -144,16 +143,18 @@ void CJsonParser::BuildTree(std::list<CJsonObject> objs, int startPos)
 
             std::list<CJsonObject> subobj1;
             auto subIterBegin = iter;
-            std::advance(subIterBegin, startPos+1);
+            std::advance(subIterBegin, 1);
             auto subIterEnd = objs.begin();
             std::advance(subIterEnd, closingStatementPos);
             objs.splice(subobj1.begin(), objs, subIterBegin, subIterEnd);
-            BuildTree(subobj1, startPos);
+            BuildTree(subobj1);
+
+            std::advance(subIterEnd, 1);
 
             std::list<CJsonObject> subobj2;
             objs.splice(subobj2.begin(), objs, subIterEnd, objs.end());
 
-            BuildTree(subobj2, startPos);
+            BuildTree(subobj2);
 
 
             
@@ -165,11 +166,17 @@ void CJsonParser::BuildTree(std::list<CJsonObject> objs, int startPos)
             closingStatementPos = findClosingStatement( objs, JsonObjectType::ARRAY_START, JsonObjectType::ARRAY_END);
             std::list<CJsonObject> subobj1;
             auto subIterBegin = iter;
-            std::advance(subIterBegin, startPos+1);
+            std::advance(subIterBegin, 1);
             auto subIterEnd = objs.begin();
             std::advance(subIterEnd, closingStatementPos);
             objs.splice(subobj1.begin(), objs, subIterBegin, subIterEnd);
-            BuildTree(subobj1, startPos);
+            BuildTree(subobj1);
+            
+            std::advance(subIterEnd, 1);
+            std::list<CJsonObject> subobj2;
+            objs.splice(subobj2.begin(), objs, subIterEnd, objs.end());
+
+            BuildTree(subobj2);
         }
         else if(iter->m_type == JsonObjectType::NUMBER)
         {
@@ -181,7 +188,7 @@ void CJsonParser::BuildTree(std::list<CJsonObject> objs, int startPos)
             objs.splice(subobj1.begin(), objs, iter, objs.end());
             
 
-            BuildTree(subobj1, startPos);
+            BuildTree(subobj1);
         }
         else if(iter->m_type == JsonObjectType::STRING)
         {
@@ -191,7 +198,7 @@ void CJsonParser::BuildTree(std::list<CJsonObject> objs, int startPos)
             std::advance(iter, 1);
             std::list<CJsonObject> subobj1;
             objs.splice(subobj1.begin(), objs, iter, objs.end());
-            BuildTree(subobj1, startPos);
+            BuildTree(subobj1);
 
         }
         else if((iter->m_type == JsonObjectType::SEPARATOR) || (iter->m_type == JsonObjectType::COMMA))
@@ -199,7 +206,7 @@ void CJsonParser::BuildTree(std::list<CJsonObject> objs, int startPos)
             std::advance(iter, 1);
             std::list<CJsonObject> subobj1;
             objs.splice(subobj1.begin(), objs, iter, objs.end());
-            BuildTree(subobj1, startPos);
+            BuildTree(subobj1);
 
         }
         else if(iter->m_type == JsonObjectType::UNKNOWN)
