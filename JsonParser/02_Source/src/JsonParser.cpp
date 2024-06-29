@@ -10,7 +10,6 @@ CJsonParser::~CJsonParser()
 void CJsonParser::parse(std::string jsonFile)
 {
     //@Todo remove all white spaces
-    //Ellie ist süß
     stepThrough(jsonFile);
 }
 
@@ -141,7 +140,7 @@ void CJsonParser::BuildTree(std::list<CJsonObject> objs, int startPos)
         if(iter->m_type == JsonObjectType::OBJECT_START)
         {
             //@Todo finde end of object
-            closingStatementPos = findClosingStatement(objs, JsonObjectType::OBJECT_START, JsonObjectType::OBJECT_END, 0);
+            closingStatementPos = findClosingStatement(objs, JsonObjectType::OBJECT_START, JsonObjectType::OBJECT_END);
 
             std::list<CJsonObject> subobj1;
             auto subIterBegin = iter;
@@ -163,7 +162,7 @@ void CJsonParser::BuildTree(std::list<CJsonObject> objs, int startPos)
         else if(iter->m_type == JsonObjectType::ARRAY_START)
         {
             //@Todo finde end of array
-            closingStatementPos = findClosingStatement( objs, JsonObjectType::ARRAY_START, JsonObjectType::ARRAY_END, 0);
+            closingStatementPos = findClosingStatement( objs, JsonObjectType::ARRAY_START, JsonObjectType::ARRAY_END);
             std::list<CJsonObject> subobj1;
             auto subIterBegin = iter;
             std::advance(subIterBegin, startPos+1);
@@ -212,13 +211,13 @@ void CJsonParser::BuildTree(std::list<CJsonObject> objs, int startPos)
     }
 }
 
-int CJsonParser::findClosingStatement(std::list<CJsonObject> list ,JsonObjectType openingStatement, JsonObjectType closingStatement,  int openingStatementPos)
+int CJsonParser::findClosingStatement(std::list<CJsonObject> list ,JsonObjectType openingStatement, JsonObjectType closingStatement)
 {
     int openings = 0;
     int closing = 0;
-    int foundBeginTokenPos = openingStatementPos;
-    int foundEndTokenPos = openingStatementPos;
-    int nextTokenPos = openingStatementPos;
+    int foundBeginTokenPos = 0;
+    int foundEndTokenPos = 0;
+    int nextTokenPos = 0;
     do
     {
         //find next endTokenPos
