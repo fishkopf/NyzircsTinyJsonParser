@@ -1,7 +1,9 @@
 #ifndef JSON_ROOT_H
 #define JSON_ROOT_H
 #include "JsonElement.h"
-class JsonRoot {
+
+class JsonRoot : public JsonElement
+{
 public:
     // Constructor
     JsonRoot();
