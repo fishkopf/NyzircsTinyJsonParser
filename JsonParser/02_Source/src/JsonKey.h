@@ -1,19 +1,29 @@
 #ifndef JSON_KEY_H
 #define JSON_KEY_H
+#include <string>
 #include "JsonElement.h"
 class JsonKey : public JsonElement
 {
 public:
     // Constructor
-    JsonKey();
+    JsonKey()
+    {
+        m_type = JsonElementType::KEY;
+    
+    }
 
     // Destructor
-    ~JsonKey();
+    ~JsonKey()
+    {
+        
+    }
+    virtual void attach(JsonElement* child)
+    {
+        m_child = child;
+    }
 
-
-
+    JsonElement* m_child;
 private:
-    JsonElement* m_template;
 
 };
 

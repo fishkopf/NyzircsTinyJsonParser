@@ -6,15 +6,19 @@ class JsonRoot : public JsonElement
 {
 public:
     // Constructor
-    JsonRoot();
+    JsonRoot()
+    {
+        m_type = JsonElementType::ROOT;
+    }
 
     // Destructor
-    ~JsonRoot();
+    ~JsonRoot()
+    {}
 
+    std::vector<JsonElement*> m_children;
 
 
 private:
-    JsonElement* m_element;
 };
 
 #endif // JSONROOT_H

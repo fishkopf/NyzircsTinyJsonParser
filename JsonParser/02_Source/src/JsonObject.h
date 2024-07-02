@@ -22,8 +22,8 @@ enum class JsonObjectType
 class CJsonObject
 {
     public:
-        CJsonObject();
-        ~CJsonObject();
+        CJsonObject(){}
+        ~CJsonObject(){}
 
         JsonObjectType m_type;
         std::string m_value;

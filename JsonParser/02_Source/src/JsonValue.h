@@ -1,16 +1,26 @@
 #ifndef JSON_VALUE_H
 #define JSON_VALUE_H
+#include <string>
 
-class JsonValue {
+#include "JsonElement.h"
+
+class JsonValue : public JsonElement
+{
 public:
     // Constructor
-    JsonValue();
+    JsonValue()
+    {
+        m_type = JsonElementType::VALUE;
+    }
 
     // Destructor
-    ~JsonValue();
-
-
-
+    ~JsonValue()
+    {
+        
+    }
+    std::string m_value;
+    
+    
 private:
 
 

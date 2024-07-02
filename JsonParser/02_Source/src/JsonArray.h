@@ -1,14 +1,16 @@
 #ifndef JSON_ARRAY_H
 #define JSON_ARRAY_H
 
-class JsonArray {
+class JsonArray : public JsonElement{
 public:
     // Constructor
-    JsonArray();
+    JsonArray()
+    {
+        m_type = JsonElementType::ARRAY;
+    }
 
     // Destructor
-    ~JsonArray();
-
+    ~JsonArray(){}
 
 
 private:
