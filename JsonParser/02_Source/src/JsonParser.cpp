@@ -126,7 +126,10 @@ void CJsonParser::stepThrough(std::string& jsonStr)
 }
 int CJsonParser::BuildTree(std::list<CJsonObject> objs, int depth, JsonElement* parent)
 {
-
+    if(objs.empty())
+    {
+        return -1;
+    }
     int closingStatementPos = 0;
     while(!objs.empty())
     {
@@ -198,33 +201,12 @@ int CJsonParser::BuildTree(std::list<CJsonObject> objs, int depth, JsonElement* 
                 std::cout<<" ";
             }
             std::cout<<"STRING "<<objs.begin()->m_value<<std::endl;
-
-            JsonKey* key = new JsonKey();
-            key->m_name = objs.begin()->m_value;
-            parent->attach(key);
-
-            auto iter = objs.begin();
-            std::advance(iter, 1);
-            if(iter->m_type != JsonObjectType::SEPARATOR)
-            {   
-                return -1; //ERROR
-            }
-            std::advance(iter, 1);
-            if((iter->m_type == JsonObjectType::ARRAY_START) || (iter->m_type == JsonObjectType::OBJECT_START))
-            {
-                std::list<CJsonObject> tmp = createSubList(objs, 2, -1);
-                BuildTree(tmp, depth+1, key);
-                objs = tmp;
-                return 0; //ERROR
-            }else if((iter->m_type == JsonObjectType::STRING) || (iter->m_type == JsonObjectType::NUMBER))
-            {
-                
-                JsonValue* value = new JsonValue();
-                value->m_value = iter->m_value;
-                key->attach(value);
-                std::list<CJsonObject> tmp = createSubList(objs, 2, -1);
-                objs = tmp;
-            }
+            JsonKey* value = new JsonKey();
+            value->m_name = objs.begin()->m_value;
+            parent->attach(value);
+            std::list<CJsonObject> tmp = createSubList(objs, 1, -1);
+            objs = tmp;
+           
 
         }
         else if((objs.begin()->m_type == JsonObjectType::SEPARATOR) || (objs.begin()->m_type == JsonObjectType::COMMA))

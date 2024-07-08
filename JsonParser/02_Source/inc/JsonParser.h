@@ -23,9 +23,12 @@ class CJsonParser
         void stepThrough(std::string& jsonStr);
         int BuildTree(std::list<CJsonObject> objs, int depth,JsonElement* parent);
         int findClosingStatement( std::list<CJsonObject> list, JsonObjectType type, JsonObjectType closingStatement);
-        
+        int matchKeytoValue(std::list<CJsonObject> list, int startPos);
+
         int find(std::list<CJsonObject> objs, JsonObjectType type, int startPos);
         void print();
+        
+        
     private:
         std::list<CJsonObject> createSubList(std::list<CJsonObject> list, int startPos, int endPos);
         std::list<CJsonObject> m_jsonObjects;
