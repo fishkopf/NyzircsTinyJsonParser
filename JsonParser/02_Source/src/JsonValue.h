@@ -19,7 +19,10 @@ public:
         
     }
     std::string m_value;
-    
+    virtual void attach(JsonElement* child) override
+    {
+        // Do nothing
+    }
     
 private:
 

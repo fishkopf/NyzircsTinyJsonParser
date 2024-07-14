@@ -21,17 +21,21 @@ class CJsonParser
         void parse(std::string jsonFile);
         CJsonObject findNextToken(std::string& jsonStr,int start );
         void stepThrough(std::string& jsonStr);
-        int BuildTree(std::list<CJsonObject> objs, int depth,JsonElement* parent);
-        int findClosingStatement( std::list<CJsonObject> list, JsonObjectType type, JsonObjectType closingStatement);
-        int matchKeytoValue(std::list<CJsonObject> list, int startPos);
+        int findClosingStatementFrom(std::list<CJsonObject> list, int startPos, JsonObjectType openingStatement, JsonObjectType closingStatement);
 
+        int buildTree(std::list<CJsonObject> objs, int startPos, int endPos, JsonElement* parent);
         int find(std::list<CJsonObject> objs, JsonObjectType type, int startPos);
         void print();
         
         
     private:
+        int parseObject(std::list<CJsonObject> list, int startPos, JsonElement* parent);
+        int parseArray(std::list<CJsonObject> objs, int startPos, JsonElement* parent);
+        int processValue(std::list<CJsonObject> objs, int startPos, JsonElement* parent);
+
         std::list<CJsonObject> createSubList(std::list<CJsonObject> list, int startPos, int endPos);
         std::list<CJsonObject> m_jsonObjects;
+        
         
 
 };

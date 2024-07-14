@@ -15,10 +15,7 @@ public:
     ~JsonRoot()
     {}
 
-    std::vector<JsonElement*> m_children;
 
-
-private:
 };
 
 #endif // JSONROOT_H

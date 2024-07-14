@@ -17,12 +17,7 @@ public:
     {
         
     }
-    virtual void attach(JsonElement* child)
-    {
-        m_child = child;
-    }
 
-    JsonElement* m_child;
 private:
 
 };

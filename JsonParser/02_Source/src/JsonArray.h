@@ -13,9 +13,6 @@ public:
     ~JsonArray(){}
 
 
-private:
-    // Private data members
-
 };
 
 #endif // JSONARRAY_H

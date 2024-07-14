@@ -31,13 +31,15 @@ public:
 
     }
 
-    virtual void attach(JsonElement* child)
+    virtual void attach(JsonElement* child) 
     {
         m_children.push_back(child);
     }
-    std::vector<JsonElement*> m_children;
+
+
     std::string m_name;
     JsonElementType m_type;
+    std::vector<JsonElement*> m_children;
 private:
 
 

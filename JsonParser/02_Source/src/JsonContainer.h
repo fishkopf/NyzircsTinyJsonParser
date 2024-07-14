@@ -14,6 +14,7 @@ public:
 
     ~JsonContainer()
     {}
+
 };
 
 #endif // JSON_CONTAINER_H
