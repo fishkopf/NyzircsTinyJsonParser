@@ -14,8 +14,10 @@ enum class JsonObjectType
     ARRAY_END,
     SEPARATOR,
     COMMA,
-    UNKNOWN,
-    NUMBER
+    INTEGER,
+    FLOAT,
+    WHITESPACE,
+    UNKNOWN
 
 };
 
@@ -24,11 +26,11 @@ class CJsonObject
     public:
         CJsonObject(){}
         ~CJsonObject(){}
-
+        
         JsonObjectType m_type;
         std::string m_value;
-private:
-    std::vector<JsonElement*> m_elements;
+    private:
+        std::vector<JsonElement*> m_elements;
 
 };
 #endif

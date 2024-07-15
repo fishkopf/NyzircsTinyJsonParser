@@ -17,7 +17,12 @@ public:
     {
         
     }
-
+    std::string serialize() override
+    {
+        std::string serialized = "\""+ m_name + "\""+ ":";
+        serialized += m_children[0]->serialize();
+        return serialized;
+    }
 private:
 
 };

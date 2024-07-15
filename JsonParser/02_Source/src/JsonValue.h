@@ -23,6 +23,10 @@ public:
     {
         // Do nothing
     }
+    virtual std::string serialize() override
+    {
+        return m_value;
+    }
     
 private:
 

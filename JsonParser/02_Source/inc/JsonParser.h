@@ -32,6 +32,8 @@ class CJsonParser
         int parseObject(std::list<CJsonObject> list, int startPos, JsonElement* parent);
         int parseArray(std::list<CJsonObject> objs, int startPos, JsonElement* parent);
         int processValue(std::list<CJsonObject> objs, int startPos, JsonElement* parent);
+        std::string returnNumber(std::string str);
+        bool belongsToNumber(const char& c);
 
         std::list<CJsonObject> createSubList(std::list<CJsonObject> list, int startPos, int endPos);
         std::list<CJsonObject> m_jsonObjects;

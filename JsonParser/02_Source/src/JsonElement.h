@@ -10,7 +10,8 @@ enum class JsonElementType
     CONTAINER,
     ARRAY,
     UNKNOWN,
-    NUMBER,
+    INTEGER,
+    FLOAT,
     STRING,
     ROOT
 
@@ -35,6 +36,7 @@ public:
     {
         m_children.push_back(child);
     }
+    virtual std::string serialize() = 0;
 
 
     std::string m_name;
