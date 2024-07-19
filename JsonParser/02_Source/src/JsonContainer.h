@@ -9,19 +9,40 @@ public:
     JsonContainer()
     {
         m_type = JsonElementType::CONTAINER;
-
+        m_value = std::vector<JsonElement*>();
     }
 
     ~JsonContainer()
     {}
+    JsonElement* operator[] (std::string s)
+    {
+        for (auto element : std::get<std::vector<JsonElement*>>(m_value))
+        {
+            JsonKey key = * static_cast<JsonKey*>(element);
+            if(key.m_name == s)
+            {
+                return std::get<std::vector<JsonElement*>>(m_value)[0];
+            }
+        }
+        throw std::runtime_error("Key not found");
+    }
+    JsonKey operator[] (int i)
+    {
+        JsonKey key= * static_cast<JsonKey*>(std::get<std::vector<JsonElement*>>(m_value)[0]);
+        return key;
+    }
+    virtual void attach(JsonElement* child) override
+    {
+        std::get<std::vector<JsonElement*>>(m_value).push_back(child);
+    }
     std::string serialize() override
     {
-        if(m_children.empty())
+        if(std::get<std::vector<JsonElement*>>(m_value).empty())
         {
             return "{}";
         }
         std::string serialized = "{";
-        for (auto element : m_children)
+        for (auto element : std::get<std::vector<JsonElement*>>(m_value))
         {
             serialized += element->serialize();
             serialized += ",";

@@ -7,6 +7,7 @@ public:
     JsonArray()
     {
         m_type = JsonElementType::ARRAY;
+        m_value = std::vector<JsonElement*>();
     }
 
     // Destructor
@@ -14,18 +15,22 @@ public:
 
     virtual std::string serialize() override
     {
-        if (m_children.empty())
+        if (std::get<std::vector<JsonElement*>>(m_value).empty())
         {
             return "[]";
         }
         std::string serialized = "[";
-        for (auto child : m_children)
+        for (auto child : std::get<std::vector<JsonElement*>>(m_value))
         {
             serialized += child->serialize() + ",";
         }
         serialized.pop_back(); // remove last comma
         serialized += "]";
         return serialized;
+    }
+    virtual void attach(JsonElement* child) override
+    {
+        std::get<std::vector<JsonElement*>>(m_value).push_back(child);
     }
 };
 

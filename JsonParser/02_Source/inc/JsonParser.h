@@ -31,7 +31,9 @@ class CJsonParser
     private:
         int parseObject(std::list<CJsonObject> list, int startPos, JsonElement* parent);
         int parseArray(std::list<CJsonObject> objs, int startPos, JsonElement* parent);
-        int processValue(std::list<CJsonObject> objs, int startPos, JsonElement* parent);
+        int processStrValue(std::list<CJsonObject> objs, int startPos, JsonElement* parent);
+        int processIntValue(std::list<CJsonObject> objs, int startPos, JsonElement* parent);
+        int processFloatValue(std::list<CJsonObject> objs, int startPos, JsonElement* parent);
         std::string returnNumber(std::string str);
         bool belongsToNumber(const char& c);
 

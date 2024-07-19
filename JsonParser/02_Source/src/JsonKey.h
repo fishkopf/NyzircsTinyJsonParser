@@ -9,7 +9,7 @@ public:
     JsonKey()
     {
         m_type = JsonElementType::KEY;
-    
+        m_value = std::vector<JsonElement*>();
     }
 
     // Destructor
@@ -17,10 +17,14 @@ public:
     {
         
     }
+    virtual void attach(JsonElement* child) override
+    {
+        std::get<std::vector<JsonElement*>>(m_value).push_back(child);
+    }
     std::string serialize() override
     {
         std::string serialized = "\""+ m_name + "\""+ ":";
-        serialized += m_children[0]->serialize();
+        serialized += std::get<std::vector<JsonElement*>>(m_value)[0]->serialize();
         return serialized;
     }
 private:

@@ -132,6 +132,8 @@ void CJsonParser::stepThrough(std::string& jsonStr)
     // tell us that there has been an error
     if(ret == -1){std::cout<<"Error"<<std::endl;}
     std::cout << root->serialize() << std::endl;
+
+
 }
 
 
@@ -162,9 +164,15 @@ int CJsonParser::buildTree(std::list<CJsonObject> objs, int startPos, int endPos
                 // Advance to the next token
                 ++iter;
                 // Check if the next token is a value
-                if ((iter->m_type == JsonObjectType::INTEGER) || (iter->m_type == JsonObjectType::FLOAT) || (iter->m_type == JsonObjectType::STRING))
+                if (iter->m_type == JsonObjectType::STRING) 
                 {
-                    processValue(objs, std::distance(objs.begin(), iter), key);
+                    processStrValue(objs, std::distance(objs.begin(), iter), key);
+                }else if (iter->m_type == JsonObjectType::FLOAT)
+                {
+                    processFloatValue(objs, std::distance(objs.begin(), iter), key);
+                }else if (iter->m_type == JsonObjectType::INTEGER)
+                {
+                    processIntValue(objs, std::distance(objs.begin(), iter), key);
                 }
                 else if(iter->m_type == JsonObjectType::OBJECT_START)
                 {
@@ -305,27 +313,24 @@ int CJsonParser::parseArray(std::list<CJsonObject> objs, int startPos, JsonEleme
     {          
         if(iter->m_type == JsonObjectType::INTEGER)
         {
-            JsonValue* arrElement = new JsonValue();
+            JsonValue* arrElement = new JsonValue(std::stoi(iter->m_value));
             arrElement->m_type = JsonElementType::INTEGER;
-            arrElement->m_value = iter->m_value;
             arrElement->m_name = iter->m_value;
-            parent->m_children.push_back(arrElement);
+            parent->attach(arrElement);
         }
         else if(iter->m_type == JsonObjectType::FLOAT)
         {
-            JsonValue* arrElement = new JsonValue();
+            JsonValue* arrElement = new JsonValue(std::stold(iter->m_value));
             arrElement->m_type = JsonElementType::FLOAT;
-            arrElement->m_value = iter->m_value;
             arrElement->m_name = iter->m_value;
-            parent->m_children.push_back(arrElement);
+            parent->attach(arrElement);
         }
         else if (iter->m_type == JsonObjectType::STRING)
         {
-            JsonValue* arrElement = new JsonValue();
+            JsonValue* arrElement = new JsonValue(iter->m_value);
             arrElement->m_type = JsonElementType::STRING;
-            arrElement->m_value = iter->m_value;
             arrElement->m_name = iter->m_value;
-            parent->m_children.push_back(arrElement);
+            parent->attach(arrElement);
         }else if (iter->m_type == JsonObjectType::OBJECT_START)
         {
             // @TODO
@@ -334,14 +339,32 @@ int CJsonParser::parseArray(std::list<CJsonObject> objs, int startPos, JsonEleme
     }    
     return closingStatementPos;
 }
-
-int CJsonParser::processValue(std::list<CJsonObject> objs, int startPos, JsonElement* parent)
+int CJsonParser::processIntValue(std::list<CJsonObject> objs, int startPos, JsonElement* parent)
+{
+    auto iter = objs.begin();
+    std::advance(iter, startPos);
+    JsonValue* arrElement = new JsonValue(std::stoi(iter->m_value));
+    arrElement->m_type = JsonElementType::INTEGER;
+    arrElement->m_name = iter->m_value;
+    parent->attach(arrElement);
+    return ++startPos;
+}
+int CJsonParser::processFloatValue(std::list<CJsonObject> objs, int startPos, JsonElement* parent)
+{
+    auto iter = objs.begin();
+    std::advance(iter, startPos);
+    JsonValue* arrElement = new JsonValue(std::stold(iter->m_value));
+    arrElement->m_type = JsonElementType::FLOAT;
+    arrElement->m_name = iter->m_value;
+    parent->attach(arrElement);
+    return ++startPos;
+}
+int CJsonParser::processStrValue(std::list<CJsonObject> objs, int startPos, JsonElement* parent)
 {
     // Process the value
     auto iter = objs.begin();
     std::advance(iter, startPos);
-    JsonValue* value = new JsonValue();
-    value->m_value = iter->m_value;
+    JsonValue* value = new JsonValue(iter->m_value);
     parent->attach(value);
     return ++startPos;
 }

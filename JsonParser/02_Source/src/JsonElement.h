@@ -2,6 +2,7 @@
 #define JSON_ELEMENT_H
 #include <string>
 #include <vector>
+#include <stdexcept>
 
 enum class JsonElementType
 {
@@ -24,6 +25,7 @@ public:
     JsonElement()
     {
         m_type = JsonElementType::UNKNOWN;
+        
     }
 
     // Destructor
@@ -32,17 +34,28 @@ public:
 
     }
 
-    virtual void attach(JsonElement* child) 
-    {
-        m_children.push_back(child);
-    }
+    virtual void attach(JsonElement* child) = 0;
+
     virtual std::string serialize() = 0;
-
-
     std::string m_name;
     JsonElementType m_type;
-    std::vector<JsonElement*> m_children;
+
+
+    template <typename T>
+    T getValue() const {
+        if (std::holds_alternative<T>(m_value)) {
+            return std::get<T>(m_value);
+        } else {
+            throw std::bad_variant_access();
+        }
+    }
+protected:
+    using ValueType = std::variant<int, long double, std::string, std::vector<JsonElement*>>;
+    ValueType m_value;
+
 private:
+ 
+
 
 
 };
