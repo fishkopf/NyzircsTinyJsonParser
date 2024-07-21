@@ -12,7 +12,14 @@ public:
 
     // Destructor
     ~JsonArray(){}
-
+    virtual JsonElement* operator[] (std::string s) override
+    {
+        throw std::runtime_error("Array does not support key access");
+    }
+    virtual std::string operator[] (int i) override
+    {
+        return std::get<std::vector<JsonElement*>>(m_value)[i];
+    }
     virtual std::string serialize() override
     {
         if (std::get<std::vector<JsonElement*>>(m_value).empty())
