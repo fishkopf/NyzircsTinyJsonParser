@@ -27,7 +27,14 @@ public:
         m_type = JsonElementType::UNKNOWN;
         
     }
-
+    virtual JsonElement* operator[] (std::string s)
+    {
+        throw std::runtime_error("Not implemented");
+    }
+    virtual std::string operator[] (int i)
+    {
+        throw std::runtime_error("Not implemented");
+    }
     // Destructor
     ~JsonElement()
     {
@@ -37,7 +44,7 @@ public:
     virtual void attach(JsonElement* child) = 0;
 
     virtual std::string serialize() = 0;
-    std::string m_name;
+
     JsonElementType m_type;
 
 
@@ -49,11 +56,13 @@ public:
             throw std::bad_variant_access();
         }
     }
+    std::string m_name;
 protected:
     using ValueType = std::variant<int, long double, std::string, std::vector<JsonElement*>>;
     ValueType m_value;
-
+    
 private:
+    
  
 
 

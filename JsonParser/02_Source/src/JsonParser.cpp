@@ -133,7 +133,6 @@ void CJsonParser::stepThrough(std::string& jsonStr)
     if(ret == -1){std::cout<<"Error"<<std::endl;}
     std::cout << root->serialize() << std::endl;
 
-
 }
 
 

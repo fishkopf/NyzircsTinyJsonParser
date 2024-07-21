@@ -14,22 +14,21 @@ public:
 
     ~JsonContainer()
     {}
-    JsonElement* operator[] (std::string s)
+    virtual JsonElement* operator[] (std::string s) override
     {
         for (auto element : std::get<std::vector<JsonElement*>>(m_value))
         {
             JsonKey key = * static_cast<JsonKey*>(element);
             if(key.m_name == s)
             {
-                return std::get<std::vector<JsonElement*>>(m_value)[0];
+                return element;
             }
         }
         throw std::runtime_error("Key not found");
     }
-    JsonKey operator[] (int i)
+    virtual std::string operator[] (int i) override
     {
-        JsonKey key= * static_cast<JsonKey*>(std::get<std::vector<JsonElement*>>(m_value)[0]);
-        return key;
+        return std::get<std::vector<JsonElement*>>(m_value)[i]->m_name;
     }
     virtual void attach(JsonElement* child) override
     {
