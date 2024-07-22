@@ -18,7 +18,7 @@ public:
     }
     virtual std::string operator[] (int i) override
     {
-        return std::get<std::vector<JsonElement*>>(m_value)[i];
+        return std::get<std::vector<JsonElement*>>(m_value)[i]->m_name;
     }
     virtual std::string serialize() override
     {
