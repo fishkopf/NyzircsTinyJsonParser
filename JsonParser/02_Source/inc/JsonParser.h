@@ -20,13 +20,14 @@ class CJsonParser
         ~CJsonParser();
         void parse(std::string jsonFile);
         CJsonObject findNextToken(std::string& jsonStr,int start );
-        void stepThrough(std::string& jsonStr);
+        JsonRoot* stepThrough(std::string& jsonStr);
         int findClosingStatementFrom(std::list<CJsonObject> list, int startPos, JsonObjectType openingStatement, JsonObjectType closingStatement);
 
         int buildTree(std::list<CJsonObject> objs, int startPos, int endPos, JsonElement* parent);
         int find(std::list<CJsonObject> objs, JsonObjectType type, int startPos);
         void print();
-        
+        std::string removeWhiteSpaces(std::string input);
+        std::string stripString(std::string input);
         
     private:
         int parseObject(std::list<CJsonObject> list, int startPos, JsonElement* parent);

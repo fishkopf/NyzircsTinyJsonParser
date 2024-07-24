@@ -13,6 +13,21 @@ void CJsonParser::parse(std::string jsonFile)
     stepThrough(jsonFile);
 }
 
+std::string CJsonParser::stripString(std::string input)
+{
+    input.erase(std::remove_if( input.begin(), input.end(), ::isspace ), input.end() );
+    return input;
+}
+
+
+std::string CJsonParser::removeWhiteSpaces(std::string input)
+{
+    input = stripString(input);
+    input = stripString(input);
+    input = stripString(input);
+    return input;
+}
+
 CJsonObject CJsonParser::findNextToken(std::string& jsonStr, int start)
 {
     const char str = jsonStr.at(start);
@@ -113,7 +128,7 @@ CJsonObject CJsonParser::findNextToken(std::string& jsonStr, int start)
     
 }
 
-void CJsonParser::stepThrough(std::string& jsonStr)
+JsonRoot* CJsonParser::stepThrough(std::string& jsonStr)
 {
     int start = 0;
     CJsonObject obj;
@@ -130,9 +145,12 @@ void CJsonParser::stepThrough(std::string& jsonStr)
     int ret = buildTree(m_jsonObjects, 1, m_jsonObjects.size()-1, root);
     
     // tell us that there has been an error
-    if(ret == -1){std::cout<<"Error"<<std::endl;}
-    std::cout << root->serialize() << std::endl;
-
+    if(ret == -1)
+    {
+        //@TODO handle error properly with error message
+        throw std::runtime_error("Error: Invalid JSON format");
+    }
+    return root;
 }
 
 
