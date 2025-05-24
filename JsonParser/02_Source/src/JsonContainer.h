@@ -2,6 +2,8 @@
 #define JSON_CONTAINER_H
 
 #include "JsonElement.h"
+#include "JsonKey.h"
+
 
 class JsonContainer : public JsonElement 
 {
