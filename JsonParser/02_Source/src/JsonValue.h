@@ -21,6 +21,11 @@ public:
         m_value = value;
         m_type = JsonElementType::INTEGER;
     }
+    JsonValue(unsigned int value)
+    {
+        m_value = (int)value;
+        m_type = JsonElementType::INTEGER;
+    }
     JsonValue(long double value)
     {
         m_value = value;
@@ -67,7 +72,6 @@ public:
 
 private:
     using ValueType = std::variant<int, long double, std::string>;
-    ValueType m_value;
 
 
 

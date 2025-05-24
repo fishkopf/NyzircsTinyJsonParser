@@ -57,6 +57,7 @@ public:
         }
     }
     std::string m_name;
+
 protected:
     using ValueType = std::variant<int, long double, std::string, std::vector<JsonElement*>>;
     ValueType m_value;
