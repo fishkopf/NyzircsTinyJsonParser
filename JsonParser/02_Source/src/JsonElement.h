@@ -31,7 +31,7 @@ public:
     {
         throw std::runtime_error("Not implemented");
     }
-    virtual std::string operator[] (int i)
+    virtual JsonElement* operator[] (int i)
     {
         throw std::runtime_error("Not implemented");
     }

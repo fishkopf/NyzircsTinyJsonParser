@@ -57,10 +57,9 @@ public:
             return std::to_string(std::get<long double>(m_value));
         }
 
-        return "";
-
-        
+        return "";        
     }
+
     template <typename T>
     T getValue() const {
         if (std::holds_alternative<T>(m_value)) {

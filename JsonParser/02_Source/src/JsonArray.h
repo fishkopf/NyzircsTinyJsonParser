@@ -16,9 +16,9 @@ public:
     {
         throw std::runtime_error("Array does not support key access");
     }
-    virtual std::string operator[] (int i) override
+    virtual JsonElement* operator[] (int i) override
     {
-        return std::get<std::vector<JsonElement*>>(m_value)[i]->m_name;
+        return std::get<std::vector<JsonElement*>>(m_value)[i];
     }
     virtual std::string serialize() override
     {
