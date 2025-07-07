@@ -35,6 +35,21 @@ public:
         serialized += "]";
         return serialized;
     }
+    virtual std::string serialize(unsigned int indent) override
+    {
+        if (std::get<std::vector<JsonElement*>>(m_value).empty())
+        {
+            return "[]";
+        }
+        std::string serialized = "[";
+        for (auto child : std::get<std::vector<JsonElement*>>(m_value))
+        {
+            serialized += child->serialize() + ",";
+        }
+        serialized.pop_back(); // remove last comma
+        serialized += "]\r\n";
+        return serialized;
+    }
     virtual void attach(JsonElement* child) override
     {
         std::get<std::vector<JsonElement*>>(m_value).push_back(child);

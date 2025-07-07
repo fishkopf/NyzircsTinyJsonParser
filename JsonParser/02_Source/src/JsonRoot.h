@@ -47,6 +47,18 @@ public:
         serialized += "}";
         return serialized;
     }
+        virtual std::string serialize(unsigned int indent) override
+    {
+        std::string serialized = "{";
+        for (auto element : std::get<std::vector<JsonElement*>>(m_value))
+        {
+            serialized += element->serialize(indent + 4);
+            serialized += ",";
+        }
+        serialized.pop_back(); // remove last comma, any better way?
+        serialized += "}";
+        return serialized;
+    }
 };
 
 #endif // JSONROOT_H

@@ -1,4 +1,5 @@
 #include "JsonParser.h"
+#include <iostream>
 CJsonParser::CJsonParser()
 {
     const char* ObjStart = "{";
@@ -7,10 +8,10 @@ CJsonParser::~CJsonParser()
 {
 
 }
-void CJsonParser::parse(std::string jsonFile)
+JsonRoot* CJsonParser::parse(std::string jsonFile)
 {
     //@Todo remove all white spaces
-    stepThrough(jsonFile);
+    return stepThrough(jsonFile);
 }
 
 std::string CJsonParser::stripString(std::string input)
@@ -70,7 +71,7 @@ CJsonObject CJsonParser::findNextToken(std::string& jsonStr, int start)
         
         //@Todo ERROR Handling
         obj.m_type = JsonObjectType::STRING;
-        obj.m_value = jsonStr.substr(start+1, jsonStr.find("\'",start+1)-1);
+        obj.m_value = jsonStr.substr(start+1, jsonStr.find("\"",start+1)-1);
         jsonStr.erase(start,(i-start)+1);
         return obj;
     }
@@ -176,7 +177,6 @@ int CJsonParser::buildTree(std::list<CJsonObject> objs, int startPos, int endPos
 
             //this must be a key Advance to the next token
             ++iter;
-
             if (iter->m_type == JsonObjectType::SEPARATOR) {
                 // Advance to the next token
                 ++iter;
@@ -187,16 +187,17 @@ int CJsonParser::buildTree(std::list<CJsonObject> objs, int startPos, int endPos
                 }else if (iter->m_type == JsonObjectType::FLOAT)
                 {
                     processFloatValue(objs, std::distance(objs.begin(), iter), key);
+
                 }else if (iter->m_type == JsonObjectType::INTEGER)
                 {
                     processIntValue(objs, std::distance(objs.begin(), iter), key);
+
                 }
                 else if(iter->m_type == JsonObjectType::OBJECT_START)
                 {
                     int startPos = std::distance(objs.begin(), iter);
                     int objectEnd = parseObject(objs, startPos, key);
-                    std::advance(iter, objectEnd-startPos);
-                    
+                    std::advance(iter, objectEnd-startPos);                    
                 }
                 else if(iter->m_type == JsonObjectType::ARRAY_START)
                 {
@@ -221,10 +222,12 @@ int CJsonParser::buildTree(std::list<CJsonObject> objs, int startPos, int endPos
         }
         else
         {
-            if(iter->m_type != JsonObjectType::COMMA)
+            if(iter->m_type != JsonObjectType::COMMA && iter->m_type != JsonObjectType::OBJECT_END && iter->m_type != JsonObjectType::ARRAY_END)
             {
                 CJsonObject obj = *iter;
+                std::cout << "Error: Expected a key, but found: " << obj.m_value << std::endl;
                 int position = std::distance(objs.begin(), iter);
+            
                 return -1;
             }
 
@@ -322,6 +325,13 @@ int CJsonParser::parseObject(std::list<CJsonObject> objs, int startPos, JsonElem
 int CJsonParser::parseArray(std::list<CJsonObject> objs, int startPos, JsonElement* parent)
 {
     int closingStatementPos = findClosingStatementFrom(objs, startPos, JsonObjectType::ARRAY_START, JsonObjectType::ARRAY_END);
+    if(closingStatementPos == startPos +1)
+    {
+        // empty array
+        JsonArray* arr = new JsonArray();
+        parent->attach(arr);
+        return closingStatementPos;
+    }
     auto iter = objs.begin();
     std::advance(iter, startPos);
     auto endIter = objs.begin();
@@ -399,7 +409,7 @@ std::string CJsonParser::returnNumber(std::string str)
 
 bool CJsonParser::belongsToNumber(const char &c)
 {
-    if ((c == '1') || (c == '2') ||(c == '3') || (c == '4') ||(c == '5') ||(c == '6') ||(c == '7') ||(c == '8') ||(c == '9') ||(c == '0') ||(c == '.'))
+    if ((c == '1') || (c == '2') ||(c == '3') || (c == '4') ||(c == '5') ||(c == '6') ||(c == '7') ||(c == '8') ||(c == '9') ||(c == '0') ||(c == '.') || (c == '-') )
     {
         return true;
     }

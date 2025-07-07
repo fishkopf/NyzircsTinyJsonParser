@@ -59,6 +59,11 @@ public:
 
         return "";        
     }
+    std::string serialize(unsigned int indent) override
+    {
+        std::string ret = this->serialize();
+        return  ret;
+    }
 
     template <typename T>
     T getValue() const {

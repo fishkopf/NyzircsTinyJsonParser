@@ -20,7 +20,7 @@ public:
     {
         for (auto element : std::get<std::vector<JsonElement*>>(m_value))
         {
-            JsonKey key = * static_cast<JsonKey*>(element);
+            JsonKey key = *static_cast<JsonKey*>(element);
             if(key.m_name == s)
             {
                 return element;
@@ -45,9 +45,34 @@ public:
         std::string serialized = "{";
         for (auto element : std::get<std::vector<JsonElement*>>(m_value))
         {
+            serialized += "\"" + element->m_name + "\":";
             serialized += element->serialize();
             serialized += ",";
         }
+        serialized.pop_back(); // remove last comma, any better way?
+        serialized += "}";
+        return serialized;
+    }
+    std::string serialize(unsigned int  indent) override
+    {
+
+        std::string indentStr(indent, ' ');
+        
+        if(std::get<std::vector<JsonElement*>>(m_value).empty())
+        {
+            return "{}";
+        }
+
+        std::string serialized = "{ \r\n";
+        serialized = indentStr + serialized;
+        for (auto element : std::get<std::vector<JsonElement*>>(m_value))
+        {
+            serialized += indentStr +"\"" + element->m_name + "\":";
+            serialized += element->serialize(indent + 4);
+            serialized += ",\r\n";
+        }
+        serialized.pop_back(); // remove newline, any better way?
+        serialized.pop_back(); // remove carriage return, any better way?
         serialized.pop_back(); // remove last comma, any better way?
         serialized += "}";
         return serialized;

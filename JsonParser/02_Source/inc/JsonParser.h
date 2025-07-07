@@ -18,7 +18,7 @@ class CJsonParser
     public:
         CJsonParser();
         ~CJsonParser();
-        void parse(std::string jsonFile);
+        JsonRoot* parse(std::string jsonFile);
         CJsonObject findNextToken(std::string& jsonStr,int start );
         JsonRoot* stepThrough(std::string& jsonStr);
         int findClosingStatementFrom(std::list<CJsonObject> list, int startPos, JsonObjectType openingStatement, JsonObjectType closingStatement);
@@ -44,5 +44,11 @@ class CJsonParser
         
 
 };
+// Forward declarations
+class JsonObject;
+class JsonArray;
+class JsonContainer;
+class JsonValue;
+
 
 #endif

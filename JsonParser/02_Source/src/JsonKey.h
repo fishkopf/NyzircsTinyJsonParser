@@ -27,6 +27,14 @@ public:
         serialized += std::get<std::vector<JsonElement*>>(m_value)[0]->serialize();
         return serialized;
     }
+    std::string serialize(unsigned int indent) override
+    {
+        std::string indentStr(indent, ' ');
+
+        std::string serialized = indentStr+"\""+ m_name + "\""+ ":";
+        serialized += std::get<std::vector<JsonElement*>>(m_value)[0]->serialize();
+        return serialized;
+    }
 private:
 
 };
