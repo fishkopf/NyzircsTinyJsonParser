@@ -46,7 +46,7 @@ public:
     {
         if(m_type == JsonElementType::STRING)
         {
-            return std::get<std::string>(m_value);
+            return "\""+ std::get<std::string>(m_value) + "\"";
         }
         else if(m_type == JsonElementType::INTEGER)
         {
